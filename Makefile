@@ -1,4 +1,4 @@
-.PHONY: help up down restart logs preprocess download train-% train-all clean
+.PHONY: help up down restart logs clean init download preprocess generate-val split-data
 
 help:
 	@echo "Infrastructure"
@@ -8,22 +8,13 @@ help:
 	@echo "  make logs           Tail service logs"
 	@echo "  make clean          Stop services and delete volumes"
 	@echo ""
-	@echo "Data"
-	@echo "  make download       Download dataset from Kaggle"
-	@echo "  make preprocess     Run preprocessing pipeline"
-	@echo ""
-	@echo "Training (TASK_TYPE inferred from .env)"
-	@echo "  make train-<model>  Train a single model (e.g. make train-random_forest)"
-	@echo "  make train-all      Train all models for the current TASK_TYPE"
-	@echo ""
-	@set -a && [ -f .env ] && . ./.env && set +a; \
-	echo "TASK_TYPE=$$TASK_TYPE  —  available models:"; \
-	for f in src/models/$$TASK_TYPE/*.py; do \
-		printf "  %s\n" "$$(basename $$f .py)"; \
-	done
+	@echo "Data & Preprocessing"
+	@echo "  make init           Download data and generate validation split"
+	@echo "  make download       Download main competition metadata and datasets"
+	@echo "  make generate-val   Generate local validation split from train metadata"
 
 up:
-	@bash scripts/up.sh
+	docker compose up -d
 
 down:
 	docker compose down
@@ -34,23 +25,19 @@ restart:
 logs:
 	docker compose logs -f
 
-init:
-	@set -a && [ -f .env ] && . ./.env && set +a; \
-	uv run --python 3.11 src/utils/download_dataset.py
-	@set -a && [ -f .env ] && . ./.env && set +a; \
-	uv run --python 3.11 src/preprocessing/preprocess.py
+init: download generate-val
 
-train-%:
-	@set -a && [ -f .env ] && . ./.env && set +a; \
-	uv run --python 3.11 src/models/$$TASK_TYPE/$*.py
+download:
+	@echo "Downloading PlantCLEF 2026 metadata..."
+	uvx kaggle competitions download -c plantclef-2026 -f PlantCLEF2024_single_plant_training_metadata.csv -p data/
+	uvx kaggle competitions download -c plantclef-2026 -f PlantCLEF2025_test.csv -p data/
+	@echo "Extracting datasets..."
+	unzip -n data/PlantCLEF2024_single_plant_training_metadata.csv.zip -d data/ || true
+	unzip -n data/PlantCLEF2025_test.csv.zip -d data/ || true
 
-train-all:
-	@set -a && [ -f .env ] && . ./.env && set +a; \
-	for f in src/models/$$TASK_TYPE/*.py; do \
-		model=$$(basename "$$f" .py); \
-		echo "\n========== Training $$model =========="; \
-		uv run --python 3.11 "$$f"; \
-	done
+generate-val:
+	@echo "Generating 10% validation ground-truth split..."
+	uv run scripts/generate_val_split.py
 
 clean:
 	docker compose down -v
