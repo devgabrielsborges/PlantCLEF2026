@@ -22,19 +22,21 @@ Submissions are evaluated using the **Macro-averaged F1 Score per sample (quadra
 
 ## Project Structure
 ```text
-├── data/                                 # (Not in VC) Kaggle datasets
+├── data/                                 # (Not in VC) Kaggle datasets & split outputs
 ├── notebooks/
 │   ├── baseline.ipynb                    # PyTorch ViT/DINOv2 Tiling Inference with MLflow
 │   ├── official-notebook-tiling-inference.ipynb
 │   └── official-notebook-tiling-inference_out.ipynb
+├── scripts/
+│   ├── generate_val_split.py             # Script to split training metadata into train/val
+│   └── up.sh                             # Script to start docker-compose
 ├── src/
-│   ├── config/             
-│   │   └── mlflow_init.py                # Local MLflow & MinIO connection setup
-│   ├── models/                           # Standard models & training pipelines
-│   └── preprocessing/                    # Feature engineering
+│   └── config/             
+│       └── mlflow_init.py                # Local MLflow & MinIO connection setup
 ├── docker-compose.yml                    # Local MLOps infrastructure
-├── Makefile                              # Command shortcuts for Docker & Training
-├── pyproject.toml                        # uv dependencies
+├── .pre-commit-config.yaml               # Code formatting and linting config
+├── Makefile                              # Command shortcuts for Docker & Data Prep
+├── pyproject.toml                        # uv dependencies & project scripts
 └── README.md
 ```
 
@@ -59,11 +61,36 @@ export AWS_ACCESS_KEY_ID="minioadmin"
 export AWS_SECRET_ACCESS_KEY="minioadmin"
 ```
 
-### 3. Run the Baseline
-Open `notebooks/baseline.ipynb` to execute the spatial tiling inference on the test set using the DINOv2 vision transformer backbone. The PyTorch model, metrics, and parameters will automatically be logged to your local MLflow instance.
+### 3. Download and Prepare Data
+You can download the metadata files via the Kaggle API and generate a local 10% validation ground-truth split (to measure the Macro-F1 score locally):
+```bash
+make init
+```
+This runs `make download` pulling directly from Kaggle and natively unzipping the files into `data/`, then triggers `make generate-val` (running `scripts/generate_val_split.py`).
 
-### 4. Tear down
+> **Note:** Requires Kaggle API credentials configured at `~/.kaggle/kaggle.json`.
+
+### 4. Run the Baseline
+Open `notebooks/baseline.ipynb` to execute the spatial tiling inference on the test set using the DINOv2 vision transformer backbone. The PyTorch model, validation metrics (F1, Precision, Recall, ROC AUC), and parameter tracking will automatically be routed to your local MLflow instance.
+
+### 5. Tear down
 ```bash
 make down     # stop services
 make clean    # stop services and delete volumes
 ```
+
+## Development
+This project uses `uv` for dependency management and `pre-commit` for code quality checks (`vulture`, `autoflake`, `black`, `isort`).
+```bash
+# Sync dependencies
+uv sync
+
+# Install and run pre-commit hooks
+uv pip install pre-commit
+pre-commit install
+pre-commit run --all-files
+```
+
+## Authors
+- [devgabrielsborges](https://github.com/devgabrielsborges)
+- [JuanLir4](https://github.com/JuanLir4)
