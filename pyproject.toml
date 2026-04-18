@@ -33,3 +33,7 @@ dependencies = [
 
 [project.scripts]
 generate-val = "scripts.generate_val_split:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
