@@ -9,6 +9,6 @@ def load_metadata(data_dir: str):
         sep=";",
         dtype={"partner": str},
     )
-    class_map = df_species_ids["species_id"].to_dict()
+    class_map = {k: int(v) for k, v in df_species_ids["species_id"].to_dict().items()}
 
     return df_species_ids, df_metadata, class_map
