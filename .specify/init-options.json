@@ -1,9 +1,9 @@
 {
-  "ai": "copilot",
+  "ai": "gemini",
   "branch_numbering": "sequential",
-  "context_file": ".github/copilot-instructions.md",
+  "context_file": "GEMINI.md",
   "here": true,
-  "integration": "copilot",
+  "integration": "gemini",
   "preset": null,
   "script": "sh",
   "speckit_version": "0.7.4.dev0"
