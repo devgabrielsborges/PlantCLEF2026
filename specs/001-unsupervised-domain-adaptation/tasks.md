@@ -23,9 +23,10 @@ description: "Task list for Unsupervised Domain Adaptation (DANN) implementation
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create feature directory structure in `src/models/`, `src/data/`, `src/utils/`, and `tests/unit/`
-- [ ] T002 [P] Verify `python-dotenv` and `papermill` are correctly configured in `pyproject.toml`
-- [ ] T003 [P] Initialize `.env.example` with DANN-specific parameters (Backbone, Loss weights, Paths)
+- [X] T001 Create feature directory structure in `src/models/`, `src/data/`, `src/utils/`, and `tests/unit/`
+- [X] T002 [P] Verify `python-dotenv` and `papermill` are correctly configured in `pyproject.toml`
+- [X] T003 [P] Initialize `.env.example` with DANN-specific parameters (Backbone, Loss weights, Paths)
+- [X] T004 [P] Update `Makefile` to include `run-dann` command for remote SSH execution (FR-008)
 
 ---
 
@@ -35,11 +36,11 @@ description: "Task list for Unsupervised Domain Adaptation (DANN) implementation
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Implement Gradient Reversal Layer (GRL) as `torch.autograd.Function` in `src/models/dann.py`
-- [ ] T005 [P] Implement interleaved Dataset loader (Source + Target) in `src/data/datasets.py`
-- [ ] T006 [P] Setup MLflow metric logging schema in `src/utils/metrics.py` (classification vs domain losses)
-- [ ] T007 [P] Create unit test for Gradient Reversal Layer in `tests/unit/test_dann.py`
-- [ ] T008 [P] Create unit test for interleaved data loading in `tests/unit/test_datasets.py`
+- [X] T005 Implement Gradient Reversal Layer (GRL) as `torch.autograd.Function` in `src/models/dann.py`
+- [X] T006 [P] Implement interleaved Dataset loader in `src/data/datasets.py` with domain mismatch handling (Edge Case)
+- [X] T007 [P] Setup MLflow metric logging schema in `src/utils/metrics.py` (classification vs domain losses)
+- [X] T008 [P] Create unit test for Gradient Reversal Layer in `tests/unit/test_dann.py`
+- [X] T009 [P] Create unit test for interleaved data loading in `tests/unit/test_datasets.py`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
@@ -53,11 +54,12 @@ description: "Task list for Unsupervised Domain Adaptation (DANN) implementation
 
 ### Implementation for User Story 1
 
-- [ ] T009 [P] [US1] Implement DANN Model class with Feature Extractor (DINOv2), Label Predictor, and Domain Discriminator in `src/models/dann.py`
-- [ ] T010 [US1] Create training step logic with adversarial loss calculation and GRL alpha scheduling in `notebooks/001-dann-training.ipynb`
-- [ ] T011 [US1] Integrate MLflow session initialization and metric logging in `notebooks/001-dann-training.ipynb`
-- [ ] T012 [US1] Implement base evaluation loop for source validation set in `notebooks/001-dann-training.ipynb`
-- [ ] T013 [P] [US1] Add unit test for DANN model forward pass in `tests/unit/test_dann.py`
+- [X] T010 [P] [US1] Implement DANN Model class with Feature Extractor (DINOv2), Label Predictor, and Domain Discriminator in `src/models/dann.py`
+- [X] T011 [US1] Create training step logic with adversarial loss calculation and GRL alpha scheduling in `notebooks/001-dann-training.ipynb`
+- [X] T012 [US1] Integrate MLflow session initialization and metric logging in `notebooks/001-dann-training.ipynb`
+- [X] T013 [US1] Implement base evaluation loop for source validation set in `notebooks/001-dann-training.ipynb`
+- [X] T014 [P] [US1] Add unit test for DANN model forward pass in `tests/unit/test_dann.py`
+- [X] T015 [US1] Create integration test to verify one full training step logic (TD-MLD) in `tests/integration/test_training.py`
 
 **Checkpoint**: User Story 1 is functional - model can be trained with domain adaptation.
 
@@ -71,9 +73,9 @@ description: "Task list for Unsupervised Domain Adaptation (DANN) implementation
 
 ### Implementation for User Story 2
 
-- [ ] T014 [US2] Implement `.env` loading and parameter injection into the training pipeline in `notebooks/001-dann-training.ipynb`
-- [ ] T015 [P] [US2] Update `src/data/datasets.py` to use dataset paths from environment variables via `python-dotenv`
-- [ ] T016 [US2] Add validation check in notebook to ensure all required `.env` variables are present before training starts
+- [ ] T016 [US2] Implement `.env` loading and parameter injection into the training pipeline in `notebooks/001-dann-training.ipynb`
+- [ ] T017 [P] [US2] Update `src/data/datasets.py` to use dataset paths from environment variables via `python-dotenv`
+- [ ] T018 [US2] Add validation check in notebook to ensure all required `.env` variables are present before training starts
 
 **Checkpoint**: Experiment configuration is decoupled from code.
 
@@ -87,9 +89,9 @@ description: "Task list for Unsupervised Domain Adaptation (DANN) implementation
 
 ### Implementation for User Story 3
 
-- [ ] T017 [US3] Implement feature extraction and t-SNE projection logic for source/target domains in `notebooks/001-dann-training.ipynb`
-- [ ] T018 [US3] Add visualization cells to display domain overlap and example predictions in `notebooks/001-dann-training.ipynb`
-- [ ] T019 [US3] Implement final evaluation on the target-domain labeled validation subset in `notebooks/001-dann-training.ipynb`
+- [ ] T019 [US3] Implement feature extraction and t-SNE projection logic for source/target domains in `notebooks/001-dann-training.ipynb`
+- [ ] T020 [US3] Add visualization cells to display domain overlap and example predictions in `notebooks/001-dann-training.ipynb`
+- [ ] T021 [US3] Implement final evaluation on the target-domain labeled validation subset in `notebooks/001-dann-training.ipynb`
 
 **Checkpoint**: Domain invariance is visually and quantitatively validated.
 
@@ -99,10 +101,10 @@ description: "Task list for Unsupervised Domain Adaptation (DANN) implementation
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T020 [P] Update `quickstart.md` with final `papermill` command examples for DANN training
-- [ ] T021 [P] Ensure all code follows project linting standards (black, isort, flake8)
-- [ ] T022 Document final adversarial training hyperparameters and results in `specs/001-unsupervised-domain-adaptation/research.md`
-- [ ] T023 [P] Run final validation of the full pipeline via a headless `papermill` execution
+- [ ] T022 [P] Update `quickstart.md` with final `papermill` command examples for DANN training
+- [ ] T023 [P] Ensure all code follows project linting standards (black, isort, flake8)
+- [ ] T024 Document final adversarial training hyperparameters and results in `specs/001-unsupervised-domain-adaptation/research.md`
+- [ ] T025 [P] Run final validation of the full pipeline via a headless `papermill` execution
 
 ---
 
@@ -119,21 +121,11 @@ description: "Task list for Unsupervised Domain Adaptation (DANN) implementation
 
 ### Parallel Opportunities
 
-- T002, T003 (Setup)
-- T005, T006, T007, T008 (Foundational)
-- T009 (US1 Implementation) can start in parallel with training loop structure (T010).
-- T015 (US2) and T013 (US1 Tests) are independent.
-- Documentation and linting (T020, T021) can happen in parallel at the end.
-
----
-
-## Parallel Example: Foundational Phase
-
-```bash
-# Implement data loader and metrics tracking in parallel
-Task: "Implement interleaved Dataset loader (Source + Target) in src/data/datasets.py"
-Task: "Setup MLflow metric logging schema in src/utils/metrics.py"
-```
+- T002, T003, T004 (Setup)
+- T006, T007, T008, T009 (Foundational)
+- T010 (US1 Implementation) can start in parallel with training loop structure (T011).
+- T017 (US2) and T014 (US1 Tests) are independent.
+- Documentation and linting (T022, T023) can happen in parallel at the end.
 
 ---
 
@@ -157,4 +149,4 @@ Task: "Setup MLflow metric logging schema in src/utils/metrics.py"
 
 - [P] tasks = different files, no dependencies.
 - [Story] label maps task to specific user story for traceability.
-- Follow TD-MLD: Ensure tests for GRL and Data Loaders pass before complex training begins.
+- Follow TD-MLD: Ensure tests for GRL, Data Loaders, and core training logic pass before complex training begins.

@@ -1,4 +1,4 @@
-.PHONY: help up down restart logs clean init download preprocess generate-val split-data
+.PHONY: help up down restart logs clean init download preprocess generate-val split-data run-dann
 
 help:
 	@echo "Infrastructure"
@@ -12,6 +12,9 @@ help:
 	@echo "  make init           Download data and generate validation split"
 	@echo "  make download       Download main competition metadata and datasets"
 	@echo "  make generate-val   Generate local validation split from train metadata"
+	@echo ""
+	@echo "Modeling"
+	@echo "  make run-dann       Run DANN training via papermill"
 
 up:
 	docker compose up -d
@@ -38,6 +41,10 @@ download:
 generate-val:
 	@echo "Generating 10% validation ground-truth split..."
 	uv run scripts/generate_val_split.py
+
+run-dann:
+	@echo "Running DANN training pipeline..."
+	uv run papermill notebooks/001-dann-training.ipynb notebooks/001-dann-training-output.ipynb
 
 clean:
 	docker compose down -v

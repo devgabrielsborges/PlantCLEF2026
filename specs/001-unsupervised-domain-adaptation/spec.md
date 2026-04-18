@@ -68,7 +68,7 @@ As a researcher, I want to visualize the feature space of both domains, so that 
 
 ### Functional Requirements
 
-- **FR-001**: System MUST implement a Domain-Adversarial Neural Network architecture consisting of a Feature Extractor, a Label Predictor, and a Domain Discriminator.
+- **FR-001**: System MUST implement a DANN architecture consisting of a Feature Extractor, a Label Predictor, and a Domain Discriminator.
 - **FR-002**: System MUST support training with labeled data from the source domain and unlabeled data from the target domain (e.g., bonus dataset) simultaneously.
 - **FR-003**: System MUST implement a mechanism to penalize the feature extractor based on discriminator performance (e.g., adversarial loss).
 - **FR-004**: System MUST allow configuration of the domain adaptation loss weight via external environment settings loaded internally.
