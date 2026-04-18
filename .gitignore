@@ -11,7 +11,7 @@ wheels/
 
 .env
 
-data
+/data/
 
 uv.lock
 
