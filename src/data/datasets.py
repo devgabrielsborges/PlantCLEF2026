@@ -68,6 +68,10 @@ class DomainDataset(Dataset):
 
     def __init__(self, root_dir, df, domain_label, transform=None, is_source=True):
         self.root_dir = root_dir
+        if self.root_dir is None:
+            raise ValueError(
+                "root_dir (data path) cannot be None. Ensure environment variables are loaded."
+            )
         self.df = df
         self.domain_label = domain_label
         self.transform = transform

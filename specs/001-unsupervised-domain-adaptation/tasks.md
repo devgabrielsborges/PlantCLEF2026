@@ -73,9 +73,9 @@ description: "Task list for Unsupervised Domain Adaptation (DANN) implementation
 
 ### Implementation for User Story 2
 
-- [ ] T016 [US2] Implement `.env` loading and parameter injection into the training pipeline in `notebooks/001-dann-training.ipynb`
-- [ ] T017 [P] [US2] Update `src/data/datasets.py` to use dataset paths from environment variables via `python-dotenv`
-- [ ] T018 [US2] Add validation check in notebook to ensure all required `.env` variables are present before training starts
+- [X] T016 [US2] Implement `.env` loading and parameter injection into the training pipeline in `notebooks/001-dann-training.ipynb`
+- [X] T017 [P] [US2] Update `src/data/datasets.py` to use dataset paths from environment variables via `python-dotenv`
+- [X] T018 [US2] Add validation check in notebook to ensure all required `.env` variables are present before training starts
 
 **Checkpoint**: Experiment configuration is decoupled from code.
 
