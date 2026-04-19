@@ -1,5 +1,4 @@
 import timm
-import torch
 import torch.nn as nn
 from torch.autograd import Function
 
@@ -43,11 +42,9 @@ class DANN(nn.Module):
             backbone_name, pretrained=True, num_classes=0
         )
 
-        # Get feature dimension
-        with torch.no_grad():
-            dummy_input = torch.zeros(1, 3, 224, 224)
-            features = self.feature_extractor(dummy_input)
-            feature_dim = features.shape[1]
+        # Get feature dimension dynamically
+        self.num_features = self.feature_extractor.num_features
+        feature_dim = self.num_features
 
         # 2. Label Predictor
         self.label_predictor = nn.Sequential(
