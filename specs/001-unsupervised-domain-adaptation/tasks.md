@@ -89,9 +89,9 @@ description: "Task list for Unsupervised Domain Adaptation (DANN) implementation
 
 ### Implementation for User Story 3
 
-- [ ] T019 [US3] Implement feature extraction and t-SNE projection logic for source/target domains in `notebooks/001-dann-training.ipynb`
-- [ ] T020 [US3] Add visualization cells to display domain overlap and example predictions in `notebooks/001-dann-training.ipynb`
-- [ ] T021 [US3] Implement final evaluation on the target-domain labeled validation subset in `notebooks/001-dann-training.ipynb`
+- [X] T019 [US3] Implement feature extraction and t-SNE projection logic for source/target domains in `notebooks/001-dann-training.ipynb`
+- [X] T020 [US3] Add visualization cells to display domain overlap and example predictions in `notebooks/001-dann-training.ipynb`
+- [X] T021 [US3] Implement final evaluation on the target-domain labeled validation subset in `notebooks/001-dann-training.ipynb`
 
 **Checkpoint**: Domain invariance is visually and quantitatively validated.
 
