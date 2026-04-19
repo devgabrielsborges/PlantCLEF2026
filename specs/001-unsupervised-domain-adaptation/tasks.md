@@ -101,10 +101,10 @@ description: "Task list for Unsupervised Domain Adaptation (DANN) implementation
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T022 [P] Update `quickstart.md` with final `papermill` command examples for DANN training
-- [ ] T023 [P] Ensure all code follows project linting standards (black, isort, flake8)
-- [ ] T024 Document final adversarial training hyperparameters and results in `specs/001-unsupervised-domain-adaptation/research.md`
-- [ ] T025 [P] Run final validation of the full pipeline via a headless `papermill` execution
+- [X] T022 [P] Update `quickstart.md` with final `papermill` command examples for DANN training
+- [X] T023 [P] Ensure all code follows project linting standards (black, isort, flake8)
+- [X] T024 Document final adversarial training hyperparameters and results in `specs/001-unsupervised-domain-adaptation/research.md`
+- [X] T025 [P] Run final validation of the full pipeline via a headless `papermill` execution
 
 ---
 

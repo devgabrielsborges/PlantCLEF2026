@@ -109,3 +109,19 @@ ssh user@remote "export $(cat .env | xargs) && papermill notebook.ipynb output.i
 ### Alternatives
 - **Papermill Parameters for Secrets**: Insecure.
 - **Hardcoded Config Files**: Breaks portability and security.
+
+---
+
+## 6. Recommended Hyperparameters & Expected Results
+
+### Parameters
+- **Backbone**: `vit_base_patch14_dinov2.lvd142m`
+- **Initial LR**: $10^{-3}$ (Heads), $10^{-5}$ (Backbone)
+- **Domain Weight ($\lambda$)**: $1.0$ (with sigmoid scheduling from $0 \rightarrow 1$)
+- **Batch Size**: $32$ (Source) + $32$ (Target)
+- **Epochs**: $20$
+
+### Results Validation
+- **Domain Accuracy**: Should settle around $0.45 - 0.55$ if adaptation is successful.
+- **Classification Accuracy**: Target domain performance should see a $5-12\%$ relative boost compared to source-only training.
+- **Visuals**: t-SNE should show source and target points forming overlapping clusters rather than distinct domain-based islands.

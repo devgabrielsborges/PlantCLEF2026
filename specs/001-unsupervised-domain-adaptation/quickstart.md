@@ -18,24 +18,26 @@ This guide provides the steps to execute the Domain-Adversarial Neural Network (
 
 ## Local Execution
 
-Run the training notebook using Papermill for a headless execution:
+Run the training notebook using Papermill for a headless execution. Parameters like `BATCH_SIZE` and `NUM_EPOCHS` will override the `.env` defaults if passed via `-p`.
+
 ```bash
-papermill notebooks/001-dann-training.ipynb output.ipynb \
+uv run papermill notebooks/001-dann-training.ipynb notebooks/001-dann-training-output.ipynb \
     -p BATCH_SIZE 16 \
     -p NUM_EPOCHS 5
 ```
 
 ## Remote Execution (via SSH)
 
-Use the project `Makefile` or a simple SSH tunnel to execute training on the remote cluster (`chuva`):
+Use the project `Makefile` to execute training on the remote cluster (`chuva`). Ensure `.env` is correctly populated on the remote side.
+
 ```bash
 ssh chuva "cd dev/PlantCLEF2026 && make run-dann"
 ```
 
 ## Monitoring Results
 
-1.  **MLflow**: Open the MLflow UI to track real-time progress.
+1.  **MLflow**: Open the MLflow UI to track real-time progress of classification and domain losses.
     ```bash
     mlflow ui --port 5000
     ```
-2.  **Visualization**: After training, check the generated `output.ipynb` for the t-SNE plot and classification metrics on both domains.
+2.  **Visualization**: After training, check the generated `notebooks/001-dann-training-output.ipynb` for the t-SNE plot and classification metrics on both domains. The t-SNE plot (`tsne_overlap.png`) is also logged as an MLflow artifact.
