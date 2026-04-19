@@ -66,7 +66,15 @@ class DomainDataset(Dataset):
     Supports labeled (source) and unlabeled (target) data.
     """
 
-    def __init__(self, root_dir, df, domain_label, transform=None, is_source=True):
+    def __init__(
+        self,
+        root_dir,
+        df,
+        domain_label,
+        transform=None,
+        is_source=True,
+        reverse_class_map=None,
+    ):
         self.root_dir = root_dir
         if self.root_dir is None:
             raise ValueError(
@@ -76,6 +84,7 @@ class DomainDataset(Dataset):
         self.domain_label = domain_label
         self.transform = transform
         self.is_source = is_source
+        self.reverse_class_map = reverse_class_map
 
     def __len__(self):
         return len(self.df)
@@ -85,7 +94,12 @@ class DomainDataset(Dataset):
         img_name = (
             row["image_path"] if "image_path" in row else row["image_id"] + ".jpg"
         )
-        img_path = os.path.join(self.root_dir, img_name)
+
+        # Check if img_name is already an absolute path or relative to current dir and exists
+        if os.path.isabs(img_name) or os.path.exists(img_name):
+            img_path = img_name
+        else:
+            img_path = os.path.join(self.root_dir, img_name)
 
         # Robust path resolution: check if image exists, otherwise try species_id subfolder
         if not os.path.exists(img_path) and "species_id" in row:
@@ -104,6 +118,8 @@ class DomainDataset(Dataset):
 
         if self.is_source:
             label = row["species_id"]
+            if self.reverse_class_map is not None:
+                label = self.reverse_class_map[int(label)]
         else:
             # Target domain data is unlabeled for domain adaptation
             label = -1

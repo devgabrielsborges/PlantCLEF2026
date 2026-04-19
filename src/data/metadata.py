@@ -10,5 +10,6 @@ def load_metadata(data_dir: str):
         dtype={"partner": str},
     )
     class_map = {k: int(v) for k, v in df_species_ids["species_id"].to_dict().items()}
+    reverse_class_map = {int(v): k for k, v in class_map.items()}
 
-    return df_species_ids, df_metadata, class_map
+    return df_species_ids, df_metadata, class_map, reverse_class_map
