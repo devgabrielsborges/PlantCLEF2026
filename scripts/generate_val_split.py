@@ -11,6 +11,7 @@ def main():
         data_dir, "PlantCLEF2024_single_plant_training_metadata.csv"
     )
     out_val_path = os.path.join(data_dir, "validation_ground_truth.csv")
+    out_val_metadata_path = os.path.join(data_dir, "val_metadata_split.csv")
     out_train_path = os.path.join(data_dir, "train_metadata_split.csv")
 
     if not os.path.exists(metadata_path):
@@ -42,9 +43,11 @@ def main():
 
     print(f"Train size: {len(train_df)} images | Val size: {len(val_df)} images")
 
-    # Save the training split for model training
+    # Save the splits for model training
     train_df.to_csv(out_train_path, sep=";", index=False)
-    print(f"Saved new training split metadata to {out_train_path}")
+    val_df.to_csv(out_val_metadata_path, sep=";", index=False)
+    print(f"Saved training split metadata to {out_train_path}")
+    print(f"Saved validation split metadata to {out_val_metadata_path}")
 
     # Group out validation into the exact format `baseline.ipynb` requires to compute metrics
     print("Formatting validation ground truth...")
