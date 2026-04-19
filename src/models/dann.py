@@ -60,7 +60,6 @@ class DANN(nn.Module):
             nn.ReLU(True),
             nn.Dropout(0.5),
             nn.Linear(256, 1),
-            nn.Sigmoid(),
         )
 
     def forward(self, x, alpha=1.0):
