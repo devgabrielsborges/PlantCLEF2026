@@ -57,7 +57,5 @@ def test_dann_forward():
 
     # Class output should be (batch_size, num_classes)
     assert class_out.shape == (2, 10)
-    # Domain output should be (batch_size, 1)
+    # Domain output should be (batch_size, 1) (logits)
     assert domain_out.shape == (2, 1)
-    # Domain output should be in range [0, 1] due to Sigmoid
-    assert torch.all(domain_out >= 0) and torch.all(domain_out <= 1)

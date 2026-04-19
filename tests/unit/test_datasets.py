@@ -1,5 +1,3 @@
-from unittest.mock import MagicMock
-
 import pandas as pd
 from torch.utils.data import DataLoader
 
@@ -10,22 +8,24 @@ def test_domain_dataset():
     """Verify DomainDataset returns correctly labeled images and domain labels."""
     df = pd.DataFrame({"image_path": ["img1.jpg"], "species_id": [42]})
 
-    # Mock Image.open to avoid filesystem dependency
+    # Mock Image.open and os.path.exists to avoid filesystem dependency
+    from unittest.mock import patch
+
     from PIL import Image
 
-    Image.open = MagicMock(return_value=Image.new("RGB", (224, 224)))
+    with patch("os.path.exists", return_value=True):
+        with patch("PIL.Image.open", return_value=Image.new("RGB", (224, 224))):
+            # Source Dataset
+            ds_s = DomainDataset(root_dir=".", df=df, domain_label=0, is_source=True)
+            img, label, domain = ds_s[0]
+            assert label == 42
+            assert domain == 0
 
-    # Source Dataset
-    ds_s = DomainDataset(root_dir=".", df=df, domain_label=0, is_source=True)
-    img, label, domain = ds_s[0]
-    assert label == 42
-    assert domain == 0
-
-    # Target Dataset
-    ds_t = DomainDataset(root_dir=".", df=df, domain_label=1, is_source=False)
-    img, label, domain = ds_t[0]
-    assert label == -1  # Target is unlabeled
-    assert domain == 1
+            # Target Dataset
+            ds_t = DomainDataset(root_dir=".", df=df, domain_label=1, is_source=False)
+            img, label, domain = ds_t[0]
+            assert label == -1  # Target is unlabeled
+            assert domain == 1
 
 
 def test_interleaved_loader():
