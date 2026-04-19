@@ -86,6 +86,20 @@ class DomainDataset(Dataset):
             row["image_path"] if "image_path" in row else row["image_id"] + ".jpg"
         )
         img_path = os.path.join(self.root_dir, img_name)
+
+        # Robust path resolution: check if image exists, otherwise try species_id subfolder
+        if not os.path.exists(img_path) and "species_id" in row:
+            # Species folders are usually integers
+            species_id = str(row["species_id"])
+            if species_id.endswith(".0"):  # handle float species_id in CSV
+                species_id = species_id[:-2]
+            img_path = os.path.join(self.root_dir, species_id, img_name)
+
+        if not os.path.exists(img_path):
+            raise FileNotFoundError(
+                f"Image not found at {img_path} (root: {self.root_dir})"
+            )
+
         image = Image.open(img_path).convert("RGB")
 
         if self.is_source:
