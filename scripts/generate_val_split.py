@@ -15,6 +15,7 @@ def main():
     )
     out_val_gt_path = os.path.join(data_dir, "validation_ground_truth.csv")
     out_val_composition_path = os.path.join(data_dir, "val_quadrat_composition.csv")
+    out_val_metadata_path = os.path.join(data_dir, "val_metadata_split.csv")
     out_train_path = os.path.join(data_dir, "train_metadata_split.csv")
 
     if not os.path.exists(metadata_path):
@@ -60,7 +61,9 @@ def main():
 
     print(f"Train: {len(train_df)} | Val: {len(val_df)}")
     train_df.to_csv(out_train_path, sep=";", index=False)
+    val_df.to_csv(out_val_metadata_path, sep=";", index=False)
     print(f"Saved train split to {out_train_path}")
+    print(f"Saved val split to {out_val_metadata_path}")
 
     # --- gera quadrats sintéticos ---
     print("Generating synthetic quadrats...")
