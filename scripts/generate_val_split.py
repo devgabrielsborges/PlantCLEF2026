@@ -28,13 +28,35 @@ def main():
     id_col = next((col for col in possible_id_cols if col in df.columns), df.columns[0])
     print(f"Using '{id_col}' as identifier column.")
 
-    try:
+    # Stratified split: handle species with only 1 sample
+    species_counts = df["species_id"].value_counts()
+    single_sample_species = species_counts[species_counts < 2].index
+
+    if not single_sample_species.empty:
+        print(
+            f"Detected {len(single_sample_species)} species with only one sample. "
+            "Assigning them to train set before stratified split."
+        )
+        df_single = df[df["species_id"].isin(single_sample_species)]
+        df_multi = df[~df["species_id"].isin(single_sample_species)]
+
+        # Stratified split for species with more than 1 sample
+        # We need to check if some species have very few samples (e.g., 2 or 3)
+        # where test_size=0.1 would result in 0 samples for validation if stratified.
+        # sklearn's train_test_split handles this but requires at least 1 member for each class to stratify if possible?
+        # Actually, it requires at least 2 members to have at least one in each split if we are unlucky?
+        # No, it just needs at least one member to perform stratification if test_size is very small.
+        # But for 0.1, it needs at least 2 to potentially put one in val.
+        train_multi, val_multi = train_test_split(
+            df_multi, test_size=0.1, random_state=42, stratify=df_multi["species_id"]
+        )
+
+        train_df = pd.concat([train_multi, df_single])
+        val_df = val_multi
+    else:
         train_df, val_df = train_test_split(
             df, test_size=0.1, random_state=42, stratify=df["species_id"]
         )
-    except ValueError:
-        print("Stratified split failed. Using random split...")
-        train_df, val_df = train_test_split(df, test_size=0.1, random_state=42)
 
     print(f"Train: {len(train_df)} | Val: {len(val_df)}")
     train_df.to_csv(out_train_path, sep=";", index=False)
