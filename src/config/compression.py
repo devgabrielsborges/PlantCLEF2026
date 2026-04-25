@@ -53,6 +53,7 @@ class CompressionConfig:
     compressai_quality: int
     compression_pretrained: bool
     compression_device: str
+    compression_gpu_id: int
     train_batch_size: int
     num_workers: int
     max_train_samples: int
@@ -128,7 +129,8 @@ class CompressionConfig:
             ).strip(),
             compressai_quality=_get_int("COMPRESSAI_QUALITY", 3),
             compression_pretrained=_get_bool("COMPRESSION_PRETRAINED", True),
-            compression_device=os.getenv("COMPRESSION_DEVICE", "cuda").strip(),
+            compression_device=os.getenv("COMPRESSION_DEVICE", "cpu").strip(),
+            compression_gpu_id=_get_int("COMPRESSION_GPU_ID", 0),
             train_batch_size=_get_int("TRAIN_BATCH_SIZE", 8),
             num_workers=_get_int("NUM_WORKERS", 4),
             max_train_samples=_get_int("MAX_TRAIN_SAMPLES", 10000),
@@ -171,6 +173,8 @@ class CompressionConfig:
             raise ValueError("EPOCHS must be positive.")
         if self.top_k_tile <= 0:
             raise ValueError("TOP_K_TILE must be positive.")
+        if self.compression_gpu_id < 0:
+            raise ValueError("COMPRESSION_GPU_ID must be >= 0.")
 
     def ensure_output_dirs(self) -> None:
         self.output_dir.mkdir(parents=True, exist_ok=True)
