@@ -71,6 +71,7 @@ class CompressionConfig:
         train_image_root_default = _first_existing(
             [
                 data_dir / "train_images",
+                data_dir / "images_max_side_800",
                 data_dir / "labeled",
                 data_dir / "PlantCLEF2024_single_plant_training_images",
                 data_dir
