@@ -7,6 +7,13 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 
+def _first_existing(candidates: list[Path]) -> Path | None:
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return None
+
+
 def _get_bool(name: str, default: bool) -> bool:
     raw = os.getenv(name)
     if raw is None:
@@ -61,6 +68,23 @@ class CompressionConfig:
     def from_env(cls) -> "CompressionConfig":
         load_dotenv(override=True)
         data_dir = Path(os.getenv("DATA_DIR", "data")).expanduser()
+        train_image_root_default = _first_existing(
+            [
+                data_dir / "train_images",
+                data_dir / "labeled",
+                data_dir / "PlantCLEF2024_single_plant_training_images",
+                data_dir
+                / "PlantCLEF2024_single_plant_training_images"
+                / "PlantCLEF2024_single_plant_training_images",
+            ]
+        ) or (data_dir / "train_images")
+        test_image_root_default = _first_existing(
+            [
+                data_dir / "PlantCLEF2025_test_images",
+                data_dir / "PlantCLEF2025_test_images" / "PlantCLEF2025_test_images",
+                data_dir / "test_images",
+            ]
+        ) or (data_dir / "PlantCLEF2025_test_images")
         output_dir = Path(
             os.getenv("COMPRESSION_OUTPUT_DIR", str(data_dir / "outputs"))
         ).expanduser()
@@ -77,7 +101,7 @@ class CompressionConfig:
         return cls(
             data_dir=data_dir,
             train_image_root=Path(
-                os.getenv("TRAIN_IMAGE_ROOT", str(data_dir / "train_images"))
+                os.getenv("TRAIN_IMAGE_ROOT", str(train_image_root_default))
             ).expanduser(),
             train_metadata_path=Path(
                 os.getenv(
@@ -86,7 +110,7 @@ class CompressionConfig:
                 )
             ).expanduser(),
             test_image_root=Path(
-                os.getenv("TEST_IMAGE_ROOT", str(data_dir / "PlantCLEF2025_test_images"))
+                os.getenv("TEST_IMAGE_ROOT", str(test_image_root_default))
             ).expanduser(),
             test_csv_path=Path(
                 os.getenv("TEST_CSV_PATH", str(data_dir / "PlantCLEF2025_test.csv"))
@@ -151,4 +175,3 @@ class CompressionConfig:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.compressed_cache_dir.mkdir(parents=True, exist_ok=True)
         self.submission_path.parent.mkdir(parents=True, exist_ok=True)
-
