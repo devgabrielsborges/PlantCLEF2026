@@ -1,4 +1,4 @@
-.PHONY: help up down restart logs clean init download preprocess generate-val split-data run-dann
+.PHONY: help up down restart logs clean init download preprocess generate-val split-data run-dann run-compression-baseline
 
 help:
 	@echo "Infrastructure"
@@ -15,6 +15,7 @@ help:
 	@echo ""
 	@echo "Modeling"
 	@echo "  make run-dann       Run DANN training via papermill"
+	@echo "  make run-compression-baseline Run compression-aware baseline via papermill"
 
 up:
 	docker compose up -d
@@ -45,6 +46,10 @@ generate-val:
 run-dann:
 	@echo "Running DANN training pipeline..."
 	uv run papermill notebooks/001-dann-training.ipynb notebooks/001-dann-training-output.ipynb
+
+run-compression-baseline:
+	@echo "Running compression baseline pipeline..."
+	uv run papermill notebooks/compression_baseline.ipynb notebooks/compression_baseline-output.ipynb
 
 clean:
 	docker compose down -v

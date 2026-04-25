@@ -25,6 +25,7 @@ Submissions are evaluated using the **Macro-averaged F1 Score per sample (quadra
 ├── data/                                 # (Not in VC) Kaggle datasets & split outputs
 ├── notebooks/
 │   ├── baseline.ipynb                    # PyTorch ViT/DINOv2 Tiling Inference with MLflow
+│   ├── compression_baseline.ipynb        # Compression-aware end-to-end baseline (train + inference)
 │   ├── official-notebook-tiling-inference.ipynb
 │   └── official-notebook-tiling-inference_out.ipynb
 ├── scripts/
@@ -72,6 +73,11 @@ This runs `make download` pulling directly from Kaggle and natively unzipping th
 
 ### 4. Run the Baseline
 Open `notebooks/baseline.ipynb` to execute the spatial tiling inference on the test set using the DINOv2 vision transformer backbone. The PyTorch model, validation metrics (F1, Precision, Recall, ROC AUC), and parameter tracking will automatically be routed to your local MLflow instance.
+
+To run the compression-aware pipeline notebook in batch mode:
+```bash
+make run-compression-baseline
+```
 
 ### 5. Tear down
 ```bash

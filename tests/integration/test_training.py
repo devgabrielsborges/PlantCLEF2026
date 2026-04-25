@@ -12,7 +12,7 @@ def test_training_step():
     model = DANN("resnet18", num_classes).to(device)
     optimizer = optim.Adam(model.parameters(), lr=0.001)
     criterion_class = nn.CrossEntropyLoss()
-    criterion_domain = nn.BCELoss()
+    criterion_domain = nn.BCEWithLogitsLoss()
 
     alpha = 0.5
     batch_size = 2
